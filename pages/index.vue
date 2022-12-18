@@ -18,8 +18,8 @@
             X
           </button>
         </div>
-        <div v-if="$fetchState.pending" class="loading">
-          <span>Chargement des vidéos en cours...</span>
+        <div v-if="$fetchState.pending" class="load">
+          <span />
           <br>
           <span />
         </div>
@@ -59,10 +59,12 @@ export default {
     return {
       movies: [],
       searchedMovies: [],
-      searchInput: ''
+      searchInput: '',
+      loading: false
     }
   },
   async fetch () {
+    this.loading = true
     if (this.searchInput === '') {
       await this.fetchMovies()
       return
@@ -70,7 +72,9 @@ export default {
     if (this.searchInput !== '') {
       await this.searchMovies()
     }
+    this.loading = false
   },
+  fetchDelay: 5000,
   watch: {
     searchInput () {
       console.log(this.searchInput)
@@ -218,25 +222,54 @@ export default {
 
 /* style loader */
 .loading {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    @keyframes circle-loading {
-        to {
-            transform: rotateZ('360deg');
-        }
-    }
-    span {
-        display: block;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        border: 2px solid transparent;
-        border-top-color: rgb(213, 135, 25);
-        animation: circle-loading 2500ms ease infinite;
-    }
+  @keyframes circle-loading {
+      to {
+          transform: rotateZ('360deg');
+      }
+  }
+  span {
+      display: block;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: rgb(213, 135, 25);
+      animation: circle-loading 5000ms ease infinite;
+  }
+}
+
+@keyframes rotate {
+  from {transform: rotate(0deg)}
+  to {transform: rotate(360deg)}
+}
+
+@-webkit-keyframes rotate {
+  from {-webkit-transform: rotate(0deg)}
+  to {-webkit-transform: rotate(360deg)}
+}
+.load {
+  width: 100px;
+  height: 100px;
+  margin: 110px auto 0;
+  border:solid 10px #e2a711;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  -webkit-transition: all 0.5s ease-in;
+  -webkit-animation-name: rotate;
+  -webkit-animation-duration: 2.0s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  transition: all 0.5s ease-in;
+  animation-name:rotate;
+  animation-duration: 2.0s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 </style>

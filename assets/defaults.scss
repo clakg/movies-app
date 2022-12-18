@@ -11,23 +11,6 @@
     min-height: 100vh;
 }
 
-.button {
-    display: inline-block;
-    text-decoration: none;
-    color: inherit;
-    padding: 8px 16px;
-    background-color: lightcyan;
-    border: none;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.3s ease all;
-
-    &:hover {
-        background-color: aqua;
-    }
-}
-
 .container {
     max-width: 1400px;
     margin: 0 auto;

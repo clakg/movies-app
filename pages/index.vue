@@ -2,10 +2,13 @@
   <div>
     <!-- Movies -->
     <div class="container">
-      <div>
-        <div v-for="(movie, index) in movies" :key="index">
-          <div>
-            <img :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" alt="">
+      <h1 class="title-custom">
+        STEEPLE MOVIES APP
+      </h1>
+      <div class="movies-grid">
+        <div v-for="(movie, index) in movies" :key="index" class="movie">
+          <div class="movie-img">
+            <img :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" alt="movies">
           </div>
           <div>
             {{ movie.title }}
@@ -19,7 +22,6 @@
           <div>
             {{ movie.genre_ids }}
           </div>
-          <!-- {{ movie }} -->
         </div>
       </div>
     </div>
@@ -59,3 +61,48 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.title-custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2%;
+}
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  @media (min-width: 500px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media (min-width: 750px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1100px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .movie {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    .movie-img {
+      position: relative;
+      overflow: hidden;
+      &:hover {
+        .overview {
+          transform: translateY(200);
+        }
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+      }
+    }
+  }
+}
+</style>

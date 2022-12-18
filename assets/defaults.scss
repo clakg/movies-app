@@ -2,19 +2,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     scroll-behavior: smooth;
 }
 
+hr {
+    opacity: 0.5;
+    margin: 10px 0;
+}
+
 .app {
-    background-color: rgb(144, 200, 219);
+    background-color: rgb(177, 230, 248);
     min-height: 100vh;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2%;
+    padding: 2% 2% 4% 2%;
 }
 
 .loading {

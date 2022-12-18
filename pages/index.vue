@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Movies -->
-    <div class="container">
+    <div class="container d-flex align-items-around">
       <h1 class="title-custom">
         STEEPLE MOVIES APP
       </h1>
@@ -13,9 +13,13 @@
             </div>
             <div class="flip-card-back">
               <h3>{{ movie.title }}</h3>
-              <p>Date de parution: {{ movie.release_date }}</p>
-              <p>Note moyenne: {{ movie.vote_average }}</p>
-              <p>Genre: {{ movie.genre_ids }}</p>
+              <div>
+                <p>Date de parution:<br>{{ movie.release_date }}</p>
+                <hr>
+                <p>Note moyenne:<br>{{ movie.vote_average }}</p>
+                <hr>
+                <p>Genre:<br>{{ movie.genre_ids }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -64,7 +68,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2%;
+  margin-bottom: 5%;
 }
 .image-custom {
   border-radius: 25px;
@@ -129,7 +133,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 40px 20px;
   background-color: rgb(143, 106, 12);
   border-radius: 25px;
   color: white;

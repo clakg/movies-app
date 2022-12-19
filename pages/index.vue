@@ -24,10 +24,10 @@
         <div v-if="$fetchState.pending" class="load">
           <span />
         </div>
-        <div v-else-if="$fetchState.error">
+        <!-- <div v-else-if="$fetchState.error">
           <div>Error: {{ $fetchState.error.message }}</div>
-        </div>
-        <div v-else-if="searchInput === ''" class="movies-grid">
+        </div> -->
+        <div v-if="searchInput === ''" class="movies-grid">
           <div v-for="(movie, index) in movies" :key="index" class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
@@ -90,7 +90,7 @@ export default {
     return {
       movies: [],
       searchedMovies: [],
-      searchInput: null,
+      searchInput: '',
       loading: false,
       total_pages: 1,
       page_num: 1,

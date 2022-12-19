@@ -11,22 +11,23 @@
           <input
             v-model.lazy="searchInput"
             type="text"
-            placeholder="Search"
+            placeholder="Commencer votre recherche et appuyer sur entrée"
             @keyup.enter="$fetch"
           >
           <button v-show="searchInput !== ''" class="button" @click="resetSearch">
             X
           </button>
+          <p v-if="searchedMovies.length > 0" class="results-custom">
+            {{ resultCount }}
+          </p>
         </div>
         <div v-if="$fetchState.pending" class="load">
-          <span />
-          <br>
           <span />
         </div>
         <div v-else-if="$fetchState.error">
           <div>Error: {{ $fetchState.error.message }}</div>
         </div>
-        <div class="movies-grid">
+        <div v-else-if="searchInput === ''" class="movies-grid">
           <div v-for="(movie, index) in movies" :key="index" class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
@@ -45,7 +46,37 @@
             </div>
           </div>
         </div>
+        <div v-else class="movies-grid">
+          <div v-for="(movie, index) in searchedMovies" :key="index" class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img class="image-custom" :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" alt="movies">
+              </div>
+              <div class="flip-card-back">
+                <h3>{{ movie.title }}</h3>
+                <div>
+                  <p>Date de parution:<br>{{ movie.release_date }}</p>
+                  <hr>
+                  <p>Note moyenne:<br>{{ movie.vote_average }}</p>
+                  <hr>
+                  <p>Genre:<br>{{ movie.genre_ids }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="pagination-custom">
+        <button @click="onPreviousPage">
+          Page précédente
+        </button>
+        <button @click="onNextPage">
+          Page suivante
+        </button>
+      </div>
+      <!-- <h3 v-if="searchedMovies.length === 0" class="noResult-custom">
+        Nous n'avons trouvé aucun résultat à votre rechecher :(
+      </h3> -->
     </div>
   </div>
 </template>
@@ -59,12 +90,14 @@ export default {
     return {
       movies: [],
       searchedMovies: [],
-      searchInput: '',
-      loading: false
+      searchInput: null,
+      loading: false,
+      total_pages: 1,
+      page_num: 1,
+      totalResults: 5
     }
   },
   async fetch () {
-    this.loading = true
     if (this.searchInput === '') {
       await this.fetchMovies()
       return
@@ -72,9 +105,13 @@ export default {
     if (this.searchInput !== '') {
       await this.searchMovies()
     }
-    this.loading = false
   },
-  fetchDelay: 5000,
+  fetchDelay: 2500,
+  computed: {
+    resultCount () {
+      return this.searchedMovies ? `${this.searchedMovies.length} résultats` : 'Aucun résultat'
+    }
+  },
   watch: {
     searchInput () {
       console.log(this.searchInput)
@@ -83,11 +120,21 @@ export default {
   methods: {
     // get movies from api
     async fetchMovies () {
-      const data = await axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=030e4ae4fa04b8499f401b541536d268')
+      this.loading = true
+      const data = await axios.get(
+        'https://api.themoviedb.org/3/movie/now_playing',
+        {
+          headers:
+          {
+            Authorization: 'bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiZWUxNjFjM2Q2YTczYzFiYWRmNjRiODAxN2RkODBlNCIsInN1YiI6IjYyZjIyNzIwMTUxMWFhMDA3ZDQyODRjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KLXn1jHj49w417T36NxE0NENwVQ3Htaqz-5awc_NnkI'
+          }
+        }
+      )
       const result = data
       result.data.results.forEach((movie) => {
         this.movies.push(movie)
       })
+      this.loading = false
     },
     // async getGenres () {
     // const data = await axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=030e4ae4fa04b8499f401b541536d268')
@@ -100,46 +147,81 @@ export default {
 
     // get results research from api
     async searchMovies () {
-      const data = axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=030e4ae4fa04b8499f401b541536d268&language=en-US&page=1&query=${this.searchInput}`
-      )
+      this.loading = true
+      // const data = axios.get(
+      //   'https://api.themoviedb.org/3/search/movie?',
+      //   {
+      //     headers:
+      //     {
+      //       Authorization: 'bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiZWUxNjFjM2Q2YTczYzFiYWRmNjRiODAxN2RkODBlNCIsInN1YiI6IjYyZjIyNzIwMTUxMWFhMDA3ZDQyODRjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KLXn1jHj49w417T36NxE0NENwVQ3Htaqz-5awc_NnkI'
+      //     },
+      //     query: this.searchInput
+      //   }
+      // )
+      // const getTitle = this.searchedMovies.map(m => m.title)
+      // const searchInput = getTitle.flatMap(t => t.toLowerCase().includes(this.searchInput.toLowerCase()))
+      // this.searchInput = searchInput
+
+      const data = axios.get(`https://api.themoviedb.org/3/search/movie?api_key=030e4ae4fa04b8499f401b541536d268&language=en-US&page=${this.page_num}&query=${this.searchInput}`)
       const result = await data
       result.data.results.forEach((movie) => {
         this.searchedMovies.push(movie)
       })
+      this.loading = false
     },
 
     // initialize searchbar
     resetSearch () {
       this.searchInput = ''
       this.searchedMovies = []
+    },
+
+    // Pagination
+    onNextPage () {
+      if (this.movies) {
+        this.page_num += 1
+        this.fetchMovies()
+      }
+    },
+    onPreviousPage () {
+      if (this.movies) {
+        this.page_num -= 1
+        this.fetchMovies()
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
+@mixin flexRowCenter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .home {
-  .loading {
-    padding-top: 120px;
-    align-items: flex-start;
-  }
-  .search {
-    display: flex;
-    padding: 32px 16px;
-    input {
-      max-width: 350px;
-      width: 100%;
-      padding: 12px 6px;
-      font-size: 14px;
-      border: none;
-      &:focus {
-        outline: none;
+    .search {
+      display: flex;
+      padding: 32px 16px;
+      input {
+        max-width: 500px;
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 14px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
       }
-    }
     .button {
+      width: 50px;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+      border-top-right-radius: 25px;
+      border-bottom-right-radius: 25px;
+      border-top-color:lightgray;
+      border-bottom-color: lightgrey;
     }
   }
 }
@@ -171,7 +253,7 @@ export default {
 /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
 .flip-card {
   background-color: transparent;
-  width: 300px;
+  width: 325px;
   height: 450px;
   border-radius: 25px;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
@@ -271,5 +353,18 @@ export default {
   animation-duration: 2.0s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+.results-custom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1%;
+}
+.noResult-custom {
+  @include flexRowCenter()
+}
+.pagination-custom{
+  @include flexRowCenter;
+  margin: 10vh 0;
 }
 </style>

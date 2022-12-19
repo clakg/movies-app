@@ -67,3 +67,12 @@ More information about the usage of this directory in [the documentation](https:
 This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
 
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+
+
+### Ce que j'aurai souhaité faire :
+- une pagination from scratch. Habituellement j'utilise Vuetify. L'idée de construire les composants est très captivant dans le concept d'atomic design et craftsmanship.
+- affichage de la page d'un movie via son id avec un rooterLink quand on clique sur une video card
+- implémenter un scroll infini arrivant en bas de page contenant 12 cartes vidéos à la place d'une pagination standard
+- j'ai eu une erreur quand j'ai voulu appeler l'api pour fetch les genres de vidéos à savoir que je récupère bien un array d'id.s
+- je n'ai pas eu le temps de refactoriser mon code en décomposant mon fichier en composant (dans l'idée : moviesList, movieItem, pagination)
+- implémenter un screen skeleton avec un loader et une carte vierge si l'image ne charge pas

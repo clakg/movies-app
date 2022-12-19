@@ -76,3 +76,4 @@ More information about the usage of this directory in [the documentation](https:
 - j'ai eu une erreur quand j'ai voulu appeler l'api pour fetch les genres de vidéos à savoir que je récupère bien un array d'id.s
 - je n'ai pas eu le temps de refactoriser mon code en décomposant mon fichier en composant (dans l'idée : moviesList, movieItem, pagination)
 - implémenter un screen skeleton avec un loader et une carte vierge si l'image ne charge pas
+- ce serait intéressant de mettre le logo de l'entreprise dans le loader

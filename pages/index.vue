@@ -98,13 +98,7 @@ export default {
     }
   },
   async fetch () {
-    if (this.searchInput === '') {
-      await this.fetchMovies()
-      return
-    }
-    if (this.searchInput !== '') {
-      await this.searchMovies()
-    }
+    this.searchInput === '' ? await this.fetchMovies() : await this.searchMovies()
   },
   fetchDelay: 2500,
   computed: {
@@ -168,6 +162,7 @@ export default {
     resetSearch () {
       this.searchInput = ''
       this.searchedMovies = []
+      this.fetchMovies()
     },
 
     // Pagination

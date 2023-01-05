@@ -11,6 +11,9 @@
         <p>Note moyenne:<br>{{ movie.vote_average }}</p>
         <hr>
         <p>Genre:<br>{{ movie.genre_ids }}</p>
+        <button class="button-custom ma-2" @click="actionCreate">
+          Voir plus
+        </button>
       </div>
     </div>
   </div>
@@ -25,6 +28,11 @@ export default {
       default () {
         return {}
       }
+    }
+  },
+  methods: {
+    actionCreate () {
+      this.$emit('action-in-parent')
     }
   }
 }
@@ -80,10 +88,15 @@ export default {
 }
 
 .results-custom {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 1%;
-  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1%;
+}
+
+.button-custom {
+  width: 80%;
+  margin-top: 20px;
+}
 
 </style>

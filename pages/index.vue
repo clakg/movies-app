@@ -5,7 +5,7 @@
         <h1 class="title-custom">
           STEEPLE MOVIES APP
         </h1>
-
+        <router-view />
         <!-- Search -->
         <div class="container search">
           <input
@@ -24,14 +24,9 @@
         <div v-if="$fetchState.pending" class="load">
           <span />
         </div>
-        <!-- <div v-else-if="$fetchState.error">
-          <div>Error: {{ $fetchState.error.message }}</div>
-        </div> -->
         <div v-if="searchInput === ''" class="movies-grid">
           <div v-for="(movie, index) in movies" :key="index" class="flip-card">
-            <div :to="{ name: 'movie-page', params: { id: movie.id } }">
-              <movie-item :movie="movie" />
-            </div>
+            <movie-item :movie="movie" @action-in-parent="actionInParent()" />
           </div>
         </div>
         <div v-else class="movies-grid">
@@ -48,9 +43,6 @@
           Page suivante
         </button>
       </div>
-      <!-- <h3 v-if="searchedMovies.length === 0" class="noResult-custom">
-        Nous n'avons trouvé aucun résultat à votre rechecher :(
-      </h3> -->
     </div>
   </div>
 </template>
@@ -158,6 +150,10 @@ export default {
         this.page_num -= 1
         this.fetchMovies()
       }
+    },
+    actionInParent () {
+      // have to install vue router to redirect to one movie page
+      console.log('DISPLAY IN PARENT FROM CHILD')
     }
   }
 }

@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'VideoItem',
+  name: 'MovieItem',
   props: {
     movie: {
       type: Object,
@@ -32,7 +32,9 @@ export default {
 
 <style lang="scss" scoped>
 
-/* This container is needed to position the front and back side */
+.image-custom {
+  border-radius: 25px;
+}
 .flip-card-inner {
   position: relative;
   width: 100%;
@@ -42,7 +44,7 @@ export default {
   transform-style: preserve-3d;
 }
 
-/* Do an horizontal flip when you move the mouse over the flip box container */
+/* Do an horizontal flip when move the mouse over the flip box container */
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
 }
@@ -64,6 +66,8 @@ export default {
 
 /* Style the back side */
 .flip-card-back {
+  width: 325px;
+  height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;

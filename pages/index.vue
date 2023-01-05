@@ -29,40 +29,12 @@
         </div> -->
         <div v-if="searchInput === ''" class="movies-grid">
           <div v-for="(movie, index) in movies" :key="index" class="flip-card">
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <img class="image-custom" :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" alt="movies">
-              </div>
-              <div class="flip-card-back">
-                <h3>{{ movie.title }}</h3>
-                <div>
-                  <p>Date de parution:<br>{{ movie.release_date }}</p>
-                  <hr>
-                  <p>Note moyenne:<br>{{ movie.vote_average }}</p>
-                  <hr>
-                  <p>Genre:<br>{{ movie.genre_ids }}</p>
-                </div>
-              </div>
-            </div>
+            <video-item :movie="movie" />
           </div>
         </div>
         <div v-else class="movies-grid">
           <div v-for="(movie, index) in searchedMovies" :key="index" class="flip-card">
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <img class="image-custom" :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" alt="movies">
-              </div>
-              <div class="flip-card-back">
-                <h3>{{ movie.title }}</h3>
-                <div>
-                  <p>Date de parution:<br>{{ movie.release_date }}</p>
-                  <hr>
-                  <p>Note moyenne:<br>{{ movie.vote_average }}</p>
-                  <hr>
-                  <p>Genre:<br>{{ movie.genre_ids }}</p>
-                </div>
-              </div>
-            </div>
+            <video-item :movie="movie" />
           </div>
         </div>
       </div>
@@ -83,9 +55,13 @@
 
 <script>
 import axios from 'axios'
+import VideoItem from '~/components/Video-item.vue'
 
 export default {
   name: 'IndexPage',
+  components: {
+    VideoItem
+  },
   data () {
     return {
       movies: [],
@@ -132,6 +108,7 @@ export default {
       // )
       const data = await axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=030e4ae4fa04b8499f401b541536d268')
       const result = data
+      // console.log('XX', result.data.results)
       this.totalResults = result.data.total_results
       result.data.results.forEach((movie) => {
         this.movies.push(movie)
@@ -149,8 +126,10 @@ export default {
     // get results research from api
     async searchMovies () {
       this.loading = true
-      const data = axios.get(`https://api.themoviedb.org/3/search/movie?api_key=030e4ae4fa04b8499f401b541536d268&language=en-US&page=${this.page_num}&query=${this.searchInput}`)
+      const data = axios
+        .get(`https://api.themoviedb.org/3/search/movie?api_key=030e4ae4fa04b8499f401b541536d268&language=en-US&page=${this.page_num}&query=${this.searchInput}`)
       const result = await data
+      console.log('XX', result.data.results)
       this.totalResults = result.data.total_results
       result.data.results.forEach((movie) => {
         this.searchedMovies.push(movie)

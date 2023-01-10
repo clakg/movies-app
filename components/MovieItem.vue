@@ -54,7 +54,7 @@ export default {
         })
         return match ? match.name : undefined
       })
-      this.movieGenreName = names
+      this.movieGenreName = new Array(names).toString().replace(/,/g, ' . ')
       return this.movieGenreName
     }
   }

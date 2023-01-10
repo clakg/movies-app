@@ -10,7 +10,7 @@
         <hr>
         <p>Note moyenne:<br>{{ movie.vote_average }}</p>
         <hr>
-        <p>Genre:<br>{{ movie.genre_ids }}</p>
+        <p>Genre(s):<br>{{ getNames() }}</p>
         <button class="button-custom ma-2" @click="actionCreate">
           Voir plus
         </button>
@@ -28,11 +28,34 @@ export default {
       default () {
         return {}
       }
+    },
+    genres: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
+  data () {
+    return {
+      movieGenreName: []
     }
   },
   methods: {
     actionCreate () {
       this.$emit('action-in-parent')
+    },
+    getNames () {
+      let names = []
+      let match = false
+      names = this.movie.genre_ids.map((val) => {
+        match = this.genres.find((obj) => {
+          return obj.id === val
+        })
+        return match ? match.name : undefined
+      })
+      this.movieGenreName = names
+      return this.movieGenreName
     }
   }
 }

@@ -5,7 +5,6 @@
         <h1 class="title-custom">
           STEEPLE MOVIES APP
         </h1>
-        <router-view />
         <!-- Search -->
         <div class="container search">
           <input
@@ -26,7 +25,7 @@
         </div>
         <div v-if="searchInput === ''" class="movies-grid">
           <div v-for="(movie, index) in movies" :key="index" class="flip-card">
-            <movie-item :movie="movie" @action-in-parent="actionInParent()" />
+            <movie-item :movie="movie" :genres="genres" @action-in-parent="actionInParent()" />
           </div>
         </div>
         <div v-else class="movies-grid">
@@ -64,7 +63,9 @@ export default {
       loading: false,
       total_pages: 1,
       page_num: 1,
-      totalResults: -1
+      totalResults: -1,
+      genres: [],
+      movieGenres: []
     }
   },
   async fetch () {
@@ -88,42 +89,29 @@ export default {
     }
   },
   methods: {
+    // get genres
+    async getGenres () {
+      const resultTypes = await axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=030e4ae4fa04b8499f401b541536d268')
+      this.genres = resultTypes.data.genres.map(g => g)
+    },
     // get movies from api
     async fetchMovies () {
       this.loading = true
-      // const data = await axios.get(
-      //   'https://api.themoviedb.org/3/movie/now_playing',
-      //   {
-      //     headers:
-      //     {
-      //       Authorization: 'bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiZWUxNjFjM2Q2YTczYzFiYWRmNjRiODAxN2RkODBlNCIsInN1YiI6IjYyZjIyNzIwMTUxMWFhMDA3ZDQyODRjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KLXn1jHj49w417T36NxE0NENwVQ3Htaqz-5awc_NnkI'
-      //     }
-      //   }
-      // )
+      this.getGenres()
       const data = await axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=030e4ae4fa04b8499f401b541536d268')
       const result = data
-      // console.log('XX', result.data.results)
       this.totalResults = result.data.total_results
       result.data.results.forEach((movie) => {
         this.movies.push(movie)
       })
       this.loading = false
     },
-    // async getGenres () {
-    // const data = await axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=030e4ae4fa04b8499f401b541536d268')
-    // const result = data
-    // result.data.results.forEach((movie) => {
-    //   this.movies.push(movie)
-    // })
-    // }
-
     // get results research from api
     async searchMovies () {
       this.loading = true
       const data = axios
         .get(`https://api.themoviedb.org/3/search/movie?api_key=030e4ae4fa04b8499f401b541536d268&language=en-US&page=${this.page_num}&query=${this.searchInput}`)
       const result = await data
-      console.log('XX', result.data.results)
       this.totalResults = result.data.total_results
       result.data.results.forEach((movie) => {
         this.searchedMovies.push(movie)

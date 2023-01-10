@@ -49,8 +49,8 @@ export default {
       let names = []
       let match = false
       names = this.movie.genre_ids.map((val) => {
-        match = this.genres.find((obj) => {
-          return obj.id === val
+        match = this.genres.find((genre) => {
+          return genre.id === val
         })
         return match ? match.name : undefined
       })

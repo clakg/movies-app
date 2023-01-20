@@ -3,7 +3,7 @@
     <div class="container d-flex align-items-around">
       <div class="home">
         <h1 class="title-custom">
-          STEEPLE MOVIES APP
+          MOVIES APP
         </h1>
         <!-- Search -->
         <div class="container search">
@@ -34,11 +34,11 @@
           </div>
         </div>
       </div>
-      <div class="pagination-custom">
-        <button @click="onPreviousPage">
+      <div>
+        <button v-if="currentPage > 1" @click="currentPage--;fetchMovies()">
           Page précédente
         </button>
-        <button @click="onNextPage">
+        <button v-if="currentPage < totalPages" @click="currentPage++;fetchMovies()">
           Page suivante
         </button>
       </div>
@@ -58,14 +58,16 @@ export default {
   data () {
     return {
       movies: [],
+      currentPage: 1,
+      totalPages: null,
+      filmsPerPage: 20,
       searchedMovies: [],
       searchInput: '',
       loading: false,
-      total_pages: 1,
-      page_num: 1,
-      totalResults: -1,
-      genres: [],
-      movieGenres: []
+      // total_pages: 1,
+      // page_num: 1,
+      // totalResults: -1,
+      genres: []
     }
   },
   async fetch () {
@@ -88,6 +90,9 @@ export default {
       console.log(this.searchInput)
     }
   },
+  mounted () {
+    this.fetchMovies()
+  },
   methods: {
     // get genres
     async getGenres () {
@@ -98,9 +103,10 @@ export default {
     async fetchMovies () {
       this.loading = true
       this.getGenres()
-      const data = await axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=030e4ae4fa04b8499f401b541536d268')
+      const data = await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=030e4ae4fa04b8499f401b541536d268&page=${this.currentPage}`)
       const result = data
-      this.totalResults = result.data.total_results
+      this.movies = result.data.results
+      this.totalPages = result.data.total_pages
       result.data.results.forEach((movie) => {
         this.movies.push(movie)
       })

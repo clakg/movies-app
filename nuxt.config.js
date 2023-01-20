@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'steeple-movies-app',
+    title: 'movies app',
     htmlAttrs: {
       lang: 'en'
     },

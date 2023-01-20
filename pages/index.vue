@@ -2,9 +2,12 @@
   <div>
     <div class="container d-flex align-items-around">
       <div class="home">
-        <h1 class="title-custom">
-          MOVIES APP
-        </h1>
+        <div class="title-custom">
+          <h1>
+            MOVIES APP
+          </h1>
+          <img src="../assets/imgs/logo.png" alt="" class="logo-custom">
+        </div>
         <!-- Search -->
         <div class="container search">
           <input
@@ -278,8 +281,14 @@ export default {
 .noResult-custom {
   @include flexRowCenter()
 }
-.pagination-custom{
+.pagination-custom {
   @include flexRowCenter;
   margin: 10vh 0;
+}
+.logo-custom {
+  mix-blend-mode: multiply;
+  height: 100px;
+  width: 100px;
+  margin-left: 50px;
 }
 </style>

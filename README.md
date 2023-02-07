@@ -1,4 +1,4 @@
-# steeple-movies-app
+# movies-app
 
 ## Build Setup
 
